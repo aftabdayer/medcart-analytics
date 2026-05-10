@@ -1,0 +1,56 @@
+drug_id,drug_name,category,stock_qty,reorder_level,expiry_date,risk_status,days_to_expiry
+1,Paracetamol 500mg,Analgesics,475,83,2027-03-08,Healthy,305.0
+2,Amoxicillin 500mg,Antibiotics,432,30,2027-03-16,Healthy,313.0
+3,Metformin 500mg,Diabetes,83,95,2027-08-23,Low Stock,473.0
+4,Atorvastatin 10mg,Cardiac,28,41,2027-05-22,Low Stock,380.0
+5,Amlodipine 5mg,Cardiac,474,44,2027-08-27,Healthy,477.0
+6,Omeprazole 20mg,Gastro,453,86,2027-05-10,Healthy,368.0
+7,Cetirizine 10mg,Allergy,285,48,2027-09-10,Healthy,491.0
+8,Azithromycin 500mg,Antibiotics,324,58,2026-10-03,Healthy,149.0
+9,Losartan 50mg,Cardiac,321,39,2027-12-04,Healthy,576.0
+10,Aspirin 75mg,Cardiac,173,86,2027-03-12,Healthy,309.0
+11,Metoprolol 25mg,Cardiac,401,89,2026-12-29,Healthy,236.0
+12,Glimepiride 2mg,Diabetes,32,61,2028-03-26,Low Stock,689.0
+13,Telmisartan 40mg,Cardiac,126,80,2028-03-18,Healthy,681.0
+14,Pantoprazole 40mg,Gastro,164,69,2027-05-13,Healthy,371.0
+15,Montelukast 10mg,Respiratory,462,62,2026-08-11,Healthy,96.0
+16,Insulin Glargine,Diabetes,93,36,2026-09-26,Healthy,142.0
+17,Salbutamol Inhaler,Respiratory,151,90,2027-09-07,Healthy,488.0
+18,Clopidogrel 75mg,Cardiac,433,40,2027-08-12,Healthy,462.0
+19,Ibuprofen 400mg,Analgesics,88,61,2026-10-15,Healthy,161.0
+20,Dolo 650mg,Analgesics,414,54,2026-09-14,Healthy,130.0
+21,Vitamin D3 60K,Supplements,305,39,2026-08-13,Healthy,98.0
+22,Multivitamin,Supplements,157,74,2026-09-09,Healthy,125.0
+23,Calcium + D3,Supplements,298,83,2026-06-18,Near Expiry,42.0
+24,Ranitidine 150mg,Gastro,448,87,2026-07-10,Near Expiry,64.0
+25,Dicyclomine 20mg,Gastro,314,36,2027-08-05,Healthy,455.0
+26,Levocetirizine 5mg,Allergy,353,43,2026-08-31,Healthy,116.0
+27,Fexofenadine 120mg,Allergy,120,84,2027-04-12,Healthy,340.0
+28,Methylprednisolone 4mg,Steroids,7,34,2026-09-03,Low Stock,119.0
+29,Dexamethasone 0.5mg,Steroids,252,79,2027-12-04,Healthy,576.0
+30,Amikacin 500mg,Antibiotics,81,47,2026-08-15,Healthy,100.0
+31,Ceftriaxone 1g,Antibiotics,232,85,2027-10-25,Healthy,536.0
+32,Metronidazole 400mg,Antibiotics,224,42,2026-05-30,Near Expiry,23.0
+33,Ciprofloxacin 500mg,Antibiotics,158,50,2026-12-14,Healthy,221.0
+34,Enalapril 5mg,Cardiac,429,80,2027-11-13,Healthy,555.0
+35,Furosemide 40mg,Cardiac,261,54,2027-12-20,Healthy,592.0
+36,Spironolactone 25mg,Cardiac,309,36,2026-07-01,Near Expiry,55.0
+37,Thyronorm 50mcg,Hormones,303,69,2027-03-01,Healthy,298.0
+38,Thyronorm 100mcg,Hormones,454,80,2026-11-18,Healthy,195.0
+39,Clonazepam 0.5mg,Neuro,352,42,2027-07-05,Healthy,424.0
+40,Alprazolam 0.25mg,Neuro,401,74,2026-06-28,Near Expiry,52.0
+41,Escitalopram 10mg,Neuro,178,83,2026-12-02,Healthy,209.0
+42,Sertraline 50mg,Neuro,472,84,2027-01-08,Healthy,246.0
+43,Pregabalin 75mg,Neuro,411,68,2026-08-09,Healthy,94.0
+44,Gabapentin 300mg,Neuro,205,66,2027-10-10,Healthy,521.0
+45,Clobetasol Cream,Derma,270,68,2026-12-13,Healthy,220.0
+46,Betamethasone Cream,Derma,164,100,2027-06-20,Healthy,409.0
+47,Clotrimazole 1%,Derma,250,40,2026-10-23,Healthy,169.0
+48,Mupirocin 2%,Derma,327,62,2027-09-29,Healthy,510.0
+49,Ondansetron 4mg,Gastro,359,79,2026-11-10,Healthy,187.0
+50,Domperidone 10mg,Gastro,191,68,2028-06-07,Healthy,762.0
+51,Rabeprazole 20mg,Gastro,14,60,2026-12-06,Low Stock,213.0
+52,Drotaverine 80mg,Gastro,160,79,2027-12-15,Healthy,587.0
+53,Tramadol 50mg,Analgesics,214,32,2026-08-03,Near Expiry,88.0
+54,Diclofenac 50mg,Analgesics,439,85,2026-11-30,Healthy,207.0
+55,Naproxen 500mg,Analgesics,460,79,2028-02-01,Healthy,635.0

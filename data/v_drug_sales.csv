@@ -1,0 +1,56 @@
+drug_id,drug_name,category,form,total_qty_sold,total_revenue,orders_count
+1,Paracetamol 500mg,Analgesics,Tablet,1373,16858.02,555
+2,Amoxicillin 500mg,Antibiotics,Capsule,1391,121176.84,561
+3,Metformin 500mg,Diabetes,Tablet,1196,34186.53,487
+4,Atorvastatin 10mg,Cardiac,Tablet,1306,60338.66,528
+5,Amlodipine 5mg,Cardiac,Tablet,1569,61011.48,617
+6,Omeprazole 20mg,Gastro,Capsule,1234,27906.42,504
+7,Cetirizine 10mg,Allergy,Tablet,1271,19487.92,532
+8,Azithromycin 500mg,Antibiotics,Tablet,1484,182567.25,595
+9,Losartan 50mg,Cardiac,Tablet,1386,78189.25,542
+10,Aspirin 75mg,Cardiac,Tablet,1316,24276.33,543
+11,Metoprolol 25mg,Cardiac,Tablet,1422,60996.0,556
+12,Glimepiride 2mg,Diabetes,Tablet,1392,92640.9,549
+13,Telmisartan 40mg,Cardiac,Tablet,1438,70822.16,561
+14,Pantoprazole 40mg,Gastro,Tablet,1324,47466.69,542
+15,Montelukast 10mg,Respiratory,Tablet,1317,70533.8,534
+16,Insulin Glargine,Diabetes,Injection,1332,518069.45,531
+17,Salbutamol Inhaler,Respiratory,Inhaler,1472,218743.46,587
+18,Clopidogrel 75mg,Cardiac,Tablet,1329,97867.54,529
+19,Ibuprofen 400mg,Analgesics,Tablet,1468,27003.73,573
+20,Dolo 650mg,Analgesics,Tablet,1362,19571.35,536
+21,Vitamin D3 60K,Supplements,Capsule,1290,112243.1,552
+22,Multivitamin,Supplements,Tablet,1299,291935.86,525
+23,Calcium + D3,Supplements,Tablet,1317,128229.24,537
+24,Ranitidine 150mg,Gastro,Tablet,1367,28061.59,552
+25,Dicyclomine 20mg,Gastro,Tablet,1349,38692.61,533
+26,Levocetirizine 5mg,Allergy,Tablet,1516,27913.99,577
+27,Fexofenadine 120mg,Allergy,Tablet,1411,31795.03,551
+28,Methylprednisolone 4mg,Steroids,Tablet,1433,90906.24,566
+29,Dexamethasone 0.5mg,Steroids,Tablet,1319,47519.84,518
+30,Amikacin 500mg,Antibiotics,Injection,1313,128029.8,543
+31,Ceftriaxone 1g,Antibiotics,Injection,1357,250028.41,555
+32,Metronidazole 400mg,Antibiotics,Tablet,1423,26301.25,575
+33,Ciprofloxacin 500mg,Antibiotics,Tablet,1223,56349.7,489
+34,Enalapril 5mg,Cardiac,Tablet,1347,44187.02,529
+35,Furosemide 40mg,Cardiac,Tablet,1398,21503.82,554
+36,Spironolactone 25mg,Cardiac,Tablet,1389,40049.69,564
+37,Thyronorm 50mcg,Hormones,Tablet,1378,77786.41,559
+38,Thyronorm 100mcg,Hormones,Tablet,1290,95514.61,515
+39,Clonazepam 0.5mg,Neuro,Tablet,1446,47417.73,570
+40,Alprazolam 0.25mg,Neuro,Tablet,1329,24522.06,541
+41,Escitalopram 10mg,Neuro,Tablet,1341,65786.15,538
+42,Sertraline 50mg,Neuro,Tablet,1365,90831.73,545
+43,Pregabalin 75mg,Neuro,Capsule,1383,124374.82,552
+44,Gabapentin 300mg,Neuro,Capsule,1314,97191.08,501
+45,Clobetasol Cream,Derma,Cream,1343,93805.48,552
+46,Betamethasone Cream,Derma,Cream,1337,75321.68,527
+47,Clotrimazole 1%,Derma,Cream,1353,62379.27,542
+48,Mupirocin 2%,Derma,Cream,1446,140489.19,583
+49,Ondansetron 4mg,Gastro,Tablet,1378,35343.93,558
+50,Domperidone 10mg,Gastro,Tablet,1328,20404.61,519
+51,Rabeprazole 20mg,Gastro,Tablet,1347,52277.07,540
+52,Drotaverine 80mg,Gastro,Tablet,1281,28892.18,524
+53,Tramadol 50mg,Analgesics,Capsule,1427,61540.6,576
+54,Diclofenac 50mg,Analgesics,Tablet,1368,30790.33,549
+55,Naproxen 500mg,Analgesics,Tablet,1400,43115.84,558
