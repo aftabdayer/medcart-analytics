@@ -25,11 +25,16 @@ try:
 except Exception:
     GROQ_API_KEY = ""
 
-# DB is in the same folder as this script
-DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "medcart.db")
+# DB path — works both locally and on Streamlit Cloud
+_HERE = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(_HERE, "data", "medcart.db")
+if not os.path.exists(DB_PATH):
+    DB_PATH = os.path.join(_HERE, "medcart.db")  # fallback: root folder
 
 # Forecast CSV path
-FORECAST_CSV = os.path.join(os.path.dirname(os.path.abspath(__file__)), "forecast_4week.csv")
+FORECAST_CSV = os.path.join(_HERE, "data", "forecast_4week.csv")
+if not os.path.exists(FORECAST_CSV):
+    FORECAST_CSV = os.path.join(_HERE, "forecast_4week.csv")
 # ══════════════════════════════════════════════════════════════════════════════
 
 st.set_page_config(
@@ -136,10 +141,10 @@ def run_query(sql: str) -> pd.DataFrame:
 @st.cache_data(ttl=300)
 def load_metrics():
     conn = get_conn()
-    rev  = pd.read_sql_query('SELECT ROUND(SUM(total_amount),2) FROM orders WHERE status="completed"', conn).iloc[0,0]
-    ords = pd.read_sql_query('SELECT COUNT(*) FROM orders', conn).iloc[0,0]
-    pats = pd.read_sql_query('SELECT COUNT(*) FROM patients', conn).iloc[0,0]
-    drgs = pd.read_sql_query('SELECT COUNT(*) FROM drugs', conn).iloc[0,0]
+    rev  = pd.read_sql_query("SELECT ROUND(SUM(total_amount),2) AS v FROM orders WHERE status='completed'", conn).iloc[0,0]
+    ords = pd.read_sql_query("SELECT COUNT(*) AS v FROM orders", conn).iloc[0,0]
+    pats = pd.read_sql_query("SELECT COUNT(*) AS v FROM patients", conn).iloc[0,0]
+    drgs = pd.read_sql_query("SELECT COUNT(*) AS v FROM drugs", conn).iloc[0,0]
     conn.close()
     return rev, ords, pats, drgs
 
@@ -272,7 +277,7 @@ if page == "dashboard":
 
     with col2:
         df_cat = run_query("""
-            SELECT d.category, ROUND(SUM(oi.line_total)/1000,1) AS rev_k
+            SELECT d.category, ROUND(SUM(oi.quantity*oi.unit_price)/1000,1) AS rev_k
             FROM order_items oi JOIN drugs d ON d.drug_id=oi.drug_id
             JOIN orders o ON o.order_id=oi.order_id
             WHERE o.status='completed'
@@ -298,7 +303,7 @@ if page == "dashboard":
 
     with col3:
         df_top = run_query("""
-            SELECT d.name, ROUND(SUM(oi.line_total)/1000,1) AS rev_k
+            SELECT d.name, ROUND(SUM(oi.quantity*oi.unit_price)/1000,1) AS rev_k
             FROM order_items oi JOIN drugs d ON d.drug_id=oi.drug_id
             JOIN orders o ON o.order_id=oi.order_id
             WHERE o.status='completed'
