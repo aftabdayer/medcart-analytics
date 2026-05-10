@@ -124,6 +124,42 @@ st.markdown("""
         padding: 1rem; border: 1px solid #e2e8f0;
     }
     div[data-testid="stMetricValue"] { font-size: 1.8rem !important; font-weight: 700 !important; }
+
+    .page-title {
+        font-size: 1.8rem; font-weight: 700; color: #0f172a;
+        margin-bottom: 0.2rem; margin-top: 0.5rem;
+    }
+    .page-sub { font-size: 0.95rem; color: #64748b; margin-bottom: 1.4rem; }
+
+    .footer {
+        text-align: center;
+        padding: 2rem 0 1rem 0;
+        color: #94a3b8;
+        font-size: 0.82rem;
+        border-top: 1px solid #e2e8f0;
+        margin-top: 3rem;
+    }
+    .footer a { color: #3b82f6; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    .badge {
+        display: inline-block;
+        background: #eff6ff;
+        color: #1d4ed8;
+        border-radius: 20px;
+        padding: 3px 12px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        margin: 2px;
+    }
+
+    .insight-box {
+        background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+        border-left: 4px solid #3b82f6;
+        border-radius: 8px;
+        padding: 1rem 1.2rem;
+        margin: 0.5rem 0;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -191,8 +227,20 @@ with st.sidebar:
             st.rerun()
 
     st.divider()
-    st.caption("Built by Aftab Dayer")
+    st.caption("Built by **Aftab Dayer**")
     st.caption("Python · SQLite · Groq · Plotly · Streamlit")
+    st.markdown("""
+    <div style='padding-top:8px'>
+        <a href='https://github.com/aftabdayer/medcart-analytics' target='_blank'
+           style='color:#60a5fa;text-decoration:none;font-size:0.82rem'>
+           🔗 GitHub Repo
+        </a><br>
+        <a href='https://www.linkedin.com/in/aftabdayer' target='_blank'
+           style='color:#60a5fa;text-decoration:none;font-size:0.82rem'>
+           💼 LinkedIn
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
 page = st.session_state.page
 
@@ -274,8 +322,7 @@ if page == "dashboard":
             xaxis=dict(showgrid=False, tickangle=-30),
         )
         st.plotly_chart(fig, use_container_width=True)
-
-    with col2:
+        st.caption("⚠️ 2026 data is partial (Jan–May only) — the drop is expected, not a trend.")
         df_cat = run_query("""
             SELECT d.category, ROUND(SUM(oi.quantity*oi.unit_price)/1000,1) AS rev_k
             FROM order_items oi JOIN drugs d ON d.drug_id=oi.drug_id
@@ -292,7 +339,7 @@ if page == "dashboard":
             title=dict(text="Revenue by Category", font=dict(size=15, color="#0f172a")),
             height=340,
             showlegend=False,
-            annotations=[dict(text=f"Rs.{df_cat.rev_k.sum()/1000:.1f}L",
+            annotations=[dict(text=f"Rs.{df_cat.rev_k.sum()/100:.1f}L",
                               x=0.5, y=0.5, font_size=16, showarrow=False,
                               font=dict(color="#0f172a", family="DM Sans"))]
         )
@@ -319,7 +366,9 @@ if page == "dashboard":
                 line=dict(color="rgba(0,0,0,0)", width=0)
             ),
             text=df_top["rev_k"].apply(lambda v: f"Rs.{v}K"),
-            textposition="outside",
+            textposition="inside",
+            insidetextanchor="end",
+            textfont=dict(color="white", size=11),
         ))
         fig3.update_layout(
             **CHART_LAYOUT,
@@ -359,6 +408,41 @@ if page == "dashboard":
             height=360, showlegend=False,
         )
         st.plotly_chart(fig5, use_container_width=True)
+
+    # ── Key Insights ──────────────────────────────────────────────────────────
+    st.markdown("### 💡 Key Business Insights")
+    i1, i2, i3, i4 = st.columns(4)
+    with i1:
+        st.markdown("""<div class="insight-box">
+            <b>🏆 Top Category</b><br>
+            Antibiotics leads revenue at 17.1% share — consistent demand from acute illness cycles.
+        </div>""", unsafe_allow_html=True)
+    with i2:
+        st.markdown("""<div class="insight-box">
+            <b>📱 Online Dominates</b><br>
+            60% of orders are online. Investing in mobile UX directly impacts revenue.
+        </div>""", unsafe_allow_html=True)
+    with i3:
+        st.markdown("""<div class="insight-box">
+            <b>💳 UPI First</b><br>
+            UPI is the #1 payment method — aligns with India's digital payment adoption trend.
+        </div>""", unsafe_allow_html=True)
+    with i4:
+        st.markdown("""<div class="insight-box">
+            <b>📈 Seasonal Peaks</b><br>
+            Revenue spikes in Nov–Feb (winter) and Jun–Aug (monsoon). Stock up 4 weeks ahead.
+        </div>""", unsafe_allow_html=True)
+
+    # ── Footer ────────────────────────────────────────────────────────────────
+    st.markdown("""
+    <div class="footer">
+        💊 MedCart Intelligence Platform &nbsp;|&nbsp;
+        Built by <b>Aftab Dayer</b> &nbsp;|&nbsp;
+        <a href='https://github.com/aftabdayer/medcart-analytics' target='_blank'>GitHub</a> &nbsp;|&nbsp;
+        <a href='https://www.linkedin.com/in/aftabdayer' target='_blank'>LinkedIn</a> &nbsp;|&nbsp;
+        <span>Python · SQLite · Plotly · Groq AI · Streamlit</span>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -419,9 +503,7 @@ Be concise and use Rs. where relevant. Format as numbered list."""
             recs = groq_ask(prompt, max_tokens=700)
         st.markdown(recs)
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-# PAGE 3 — CUSTOMERS
+    st.markdown("""<div class="footer">💊 MedCart Intelligence Platform &nbsp;|&nbsp; Built by <b>Aftab Dayer</b> &nbsp;|&nbsp; <a href='https://github.com/aftabdayer/medcart-analytics' target='_blank'>GitHub</a> &nbsp;|&nbsp; <a href='https://www.linkedin.com/in/aftabdayer' target='_blank'>LinkedIn</a></div>""", unsafe_allow_html=True)
 # ══════════════════════════════════════════════════════════════════════════════
 elif page == "customers":
     st.markdown('<p class="page-title">👥 Customer Insights</p>', unsafe_allow_html=True)
