@@ -216,6 +216,7 @@ with st.sidebar:
         "📈 Demand Forecast":  "forecast",
         "🤖 AI Chatbot":       "chatbot",
         "🧾 Rx Scanner":       "rxscanner",
+        "👤 About":            "about",
     }
 
     if "page" not in st.session_state:
@@ -259,7 +260,7 @@ if page == "dashboard":
     rev, ords, pats, drgs = load_metrics()
 
     st.markdown('<p class="section-title">📊 Executive Dashboard</p>', unsafe_allow_html=True)
-    st.markdown('<p class="section-sub">Live overview of MedCart pharmacy performance</p>', unsafe_allow_html=True)
+    st.markdown(f'<p class="section-sub">Live overview of MedCart pharmacy performance &nbsp;·&nbsp; Last updated: {datetime.datetime.now().strftime("%d %b %Y, %I:%M %p")}</p>', unsafe_allow_html=True)
 
     # ── KPI Cards ─────────────────────────────────────────────────────────────
     c1, c2, c3, c4 = st.columns(4)
@@ -323,6 +324,8 @@ if page == "dashboard":
         )
         st.plotly_chart(fig, use_container_width=True)
         st.caption("⚠️ 2026 data is partial (Jan–May only) — the drop is expected, not a trend.")
+
+    with col2:
         df_cat = run_query("""
             SELECT d.category, ROUND(SUM(oi.quantity*oi.unit_price)/1000,1) AS rev_k
             FROM order_items oi JOIN drugs d ON d.drug_id=oi.drug_id
@@ -383,14 +386,16 @@ if page == "dashboard":
         df_pay = run_query("SELECT payment_mode, COUNT(*) AS orders FROM orders GROUP BY payment_mode ORDER BY orders DESC")
         fig4 = px.bar(df_pay, x="payment_mode", y="orders",
                       color="payment_mode",
+                      text="orders",
                       color_discrete_sequence=COLORS)
-        fig4.update_traces(marker_line_width=0)
+        fig4.update_traces(marker_line_width=0, texttemplate="%{text:,}", textposition="outside")
         fig4.update_layout(
             **CHART_LAYOUT,
             title=dict(text="Payment Methods", font=dict(size=15, color="#0f172a")),
             height=360, showlegend=False,
             xaxis=dict(showgrid=False, title=""),
             yaxis=dict(showgrid=True, gridcolor="#f1f5f9", title="Orders"),
+            uniformtext_minsize=9,
         )
         st.plotly_chart(fig4, use_container_width=True)
 
@@ -475,7 +480,14 @@ elif page == "inventory":
     with col1:
         filter_risk = st.selectbox("Filter by risk", ["All", "Out of Stock", "Low Stock", "Near Expiry", "Healthy"])
         df_show = df_inv if filter_risk == "All" else df_inv[df_inv["risk_status"] == filter_risk]
-        st.dataframe(df_show, use_container_width=True, hide_index=True, height=420)
+        df_display = df_show.rename(columns={
+            "drug_name": "Drug Name",
+            "category": "Category",
+            "stock_qty": "Stock",
+            "days_to_expiry": "Days to Expiry",
+            "risk_status": "Risk Status"
+        })
+        st.dataframe(df_display, use_container_width=True, hide_index=True, height=420)
 
     with col2:
         fig = px.scatter(df_inv, x="stock_qty", y="days_to_expiry",
@@ -1002,3 +1014,169 @@ Keep it brief and professional."""
         - Gives an estimated cost
         - Provides a dispensing summary for the pharmacist
         """)
+        st.markdown("---")
+        st.markdown("**💡 Don't have a prescription to test?** Try typing drug names manually:")
+        manual_test = st.text_input("Enter drug names (comma separated)", placeholder="Metformin, Amlodipine, Paracetamol, Insulin Glargine")
+        if manual_test:
+            drug_list = [d.strip() for d in manual_test.split(",") if d.strip()]
+            df_drugs = run_query("SELECT name, category, unit_price AS price FROM drugs ORDER BY name")
+            results = []
+            for drug in drug_list:
+                drug_lower = drug.lower()
+                matched = df_drugs[df_drugs["name"].str.lower().str.contains(drug_lower.split()[0], na=False)]
+                if not matched.empty:
+                    row = matched.iloc[0]
+                    stock_df = run_query(f"SELECT stock_qty, risk_status FROM v_inventory_risk WHERE LOWER(drug_name) LIKE '%{drug_lower.split()[0]}%' LIMIT 1")
+                    stock = int(stock_df.iloc[0]["stock_qty"]) if not stock_df.empty else "N/A"
+                    risk  = stock_df.iloc[0]["risk_status"] if not stock_df.empty else "Unknown"
+                    results.append({"Drug": drug, "Matched": row["name"], "Category": row["category"], "Price (Rs.)": row["price"], "Stock": stock, "Status": risk})
+                else:
+                    results.append({"Drug": drug, "Matched": "❌ Not found", "Category": "-", "Price (Rs.)": "-", "Stock": "-", "Status": "Not in catalog"})
+            st.dataframe(pd.DataFrame(results), use_container_width=True, hide_index=True)
+            found = [r for r in results if r["Matched"] != "❌ Not found"]
+            if found:
+                total = sum(r["Price (Rs.)"] for r in found if r["Price (Rs.)"] != "-")
+                st.metric("💰 Estimated Cost", f"Rs. {total:,.2f}")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PAGE 7 — ABOUT
+# ══════════════════════════════════════════════════════════════════════════════
+elif page == "about":
+    st.markdown('<p class="page-title">👤 About This Project</p>', unsafe_allow_html=True)
+    st.markdown('<p class="page-sub">Built as a portfolio project demonstrating end-to-end data analytics</p>', unsafe_allow_html=True)
+
+    col1, col2 = st.columns([2, 1])
+
+    with col1:
+        st.markdown("""
+        <div style="background:white;border-radius:16px;padding:2rem;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+            <h2 style="color:#0f172a;margin-top:0">💊 MedCart Intelligence Platform</h2>
+            <p style="color:#475569;font-size:1rem;line-height:1.7">
+                An end-to-end pharmacy analytics platform combining SQL data modelling,
+                Python EDA, ML demand forecasting, a Power BI-style dashboard, and an AI analyst —
+                purpose-built to demonstrate the kind of analytics stack used at health-retail
+                companies like 1mg, PharmEasy, and Apollo Pharmacy.
+            </p>
+            <hr style="border:none;border-top:1px solid #e2e8f0;margin:1.2rem 0">
+            <h3 style="color:#0f172a">🔢 By the Numbers</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:0.8rem">
+                <div style="background:#eff6ff;border-radius:10px;padding:1rem;text-align:center">
+                    <div style="font-size:1.6rem;font-weight:700;color:#1d4ed8">12,000</div>
+                    <div style="color:#64748b;font-size:0.85rem">Orders analysed</div>
+                </div>
+                <div style="background:#f0fdf4;border-radius:10px;padding:1rem;text-align:center">
+                    <div style="font-size:1.6rem;font-weight:700;color:#15803d">Rs.44.8L</div>
+                    <div style="color:#64748b;font-size:0.85rem">Revenue modelled</div>
+                </div>
+                <div style="background:#fefce8;border-radius:10px;padding:1rem;text-align:center">
+                    <div style="font-size:1.6rem;font-weight:700;color:#a16207">600</div>
+                    <div style="color:#64748b;font-size:0.85rem">Patient profiles</div>
+                </div>
+                <div style="background:#fdf4ff;border-radius:10px;padding:1rem;text-align:center">
+                    <div style="font-size:1.6rem;font-weight:700;color:#7e22ce">0.84</div>
+                    <div style="color:#64748b;font-size:0.85rem">ML model R²</div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        st.markdown("""
+        <div style="background:white;border-radius:16px;padding:2rem;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+            <h3 style="color:#0f172a;margin-top:0">🏗️ What Was Built</h3>
+            <table style="width:100%;border-collapse:collapse;font-size:0.9rem">
+                <tr style="background:#f8fafc">
+                    <td style="padding:10px;font-weight:600;color:#0f172a;border-bottom:1px solid #e2e8f0">Layer</td>
+                    <td style="padding:10px;font-weight:600;color:#0f172a;border-bottom:1px solid #e2e8f0">What</td>
+                    <td style="padding:10px;font-weight:600;color:#0f172a;border-bottom:1px solid #e2e8f0">Tools</td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">Database</td>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">7 tables, 4 analytical views, normalized schema</td>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">SQLite, SQL</td>
+                </tr>
+                <tr style="background:#f8fafc">
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">Data Generation</td>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">12K orders, 600 patients, 55 drugs, realistic Indian data</td>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">Python (stdlib)</td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">EDA</td>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">10 professional charts: seasonality, RFM, inventory risk</td>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">pandas, matplotlib, seaborn</td>
+                </tr>
+                <tr style="background:#f8fafc">
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">ML Forecast</td>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">19 features, TimeSeriesSplit CV, 4-week demand forecast</td>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">scikit-learn RandomForest</td>
+                </tr>
+                <tr>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">Dashboard</td>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">6-page interactive analytics app deployed live</td>
+                    <td style="padding:10px;color:#374151;border-bottom:1px solid #f1f5f9">Streamlit, Plotly</td>
+                </tr>
+                <tr style="background:#f8fafc">
+                    <td style="padding:10px;color:#374151">AI Analyst</td>
+                    <td style="padding:10px;color:#374151">Natural language Q&A on pharmacy data + Rx scanner</td>
+                    <td style="padding:10px;color:#374151">Groq LLaMA 3.3</td>
+                </tr>
+            </table>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown("""
+        <div style="background:linear-gradient(135deg,#1e3a5f,#0d1b2a);border-radius:16px;padding:2rem;color:white;text-align:center">
+            <div style="font-size:4rem;margin-bottom:0.5rem">👨‍💻</div>
+            <h2 style="color:white;margin:0">Aftab Dayer</h2>
+            <p style="color:#94a3b8;margin:0.3rem 0 1.2rem 0;font-size:0.9rem">Data Analyst · Python · SQL · Power BI</p>
+            <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:1rem 0">
+            <a href="https://github.com/aftabdayer/medcart-analytics" target="_blank"
+               style="display:block;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+                      border-radius:10px;padding:0.7rem;color:white;text-decoration:none;margin-bottom:0.6rem;
+                      font-size:0.9rem;transition:all 0.2s">
+               🔗 GitHub Repository
+            </a>
+            <a href="https://www.linkedin.com/in/aftabdayer" target="_blank"
+               style="display:block;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+                      border-radius:10px;padding:0.7rem;color:white;text-decoration:none;margin-bottom:0.6rem;
+                      font-size:0.9rem">
+               💼 LinkedIn Profile
+            </a>
+            <hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:1rem 0">
+            <p style="color:#94a3b8;font-size:0.82rem;margin:0">
+                Open to Data Analyst,<br>Business Analyst &<br>Freelance opportunities
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        st.markdown("""
+        <div style="background:white;border-radius:16px;padding:1.5rem;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.06)">
+            <h4 style="color:#0f172a;margin-top:0">🛠️ Tech Stack</h4>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:0.5rem">
+                <span style="background:#eff6ff;color:#1d4ed8;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600">Python</span>
+                <span style="background:#f0fdf4;color:#15803d;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600">SQLite</span>
+                <span style="background:#fefce8;color:#a16207;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600">pandas</span>
+                <span style="background:#fdf4ff;color:#7e22ce;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600">scikit-learn</span>
+                <span style="background:#fff1f2;color:#be123c;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600">Plotly</span>
+                <span style="background:#eff6ff;color:#1d4ed8;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600">Streamlit</span>
+                <span style="background:#f0fdf4;color:#15803d;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600">Groq AI</span>
+                <span style="background:#fefce8;color:#a16207;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600">Power BI</span>
+                <span style="background:#fdf4ff;color:#7e22ce;padding:4px 12px;border-radius:20px;font-size:0.8rem;font-weight:600">GitHub</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="footer">
+        💊 MedCart Intelligence Platform &nbsp;|&nbsp;
+        Built by <b>Aftab Dayer</b> &nbsp;|&nbsp;
+        <a href='https://github.com/aftabdayer/medcart-analytics' target='_blank'>GitHub</a> &nbsp;|&nbsp;
+        <a href='https://www.linkedin.com/in/aftabdayer' target='_blank'>LinkedIn</a> &nbsp;|&nbsp;
+        <span>Python · SQLite · Plotly · Groq AI · Streamlit</span>
+    </div>
+    """, unsafe_allow_html=True)
