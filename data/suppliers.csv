@@ -1,0 +1,16 @@
+supplier_id,name,city,state,phone,email,rating,created_at
+1,Sun Pharma Distributors,Mumbai,Maharashtra,+91 9691527238,info@sunpharmadistributors.com,4.7,2026-05-07
+2,Cipla Supply Chain,Pune,Maharashtra,+91 7571187196,info@ciplasupplychain.com,4.5,2026-05-07
+3,Dr Reddy Wholesale,Hyderabad,Telangana,+91 9672430506,info@drreddywholesale.com,4.6,2026-05-07
+4,Lupin Pharma Dist,Nagpur,Maharashtra,+91 8236660138,info@lupinpharmadist.com,4.3,2026-05-07
+5,Alkem Med Supplies,Mumbai,Maharashtra,+91 8564428201,info@alkemmedsupplies.com,4.4,2026-05-07
+6,Zydus Distributors,Ahmedabad,Gujarat,+91 9232814552,info@zydusdistributors.com,4.5,2026-05-07
+7,Abbott India Dist,Delhi,Delhi,+91 7330389194,info@abbottindiadist.com,4.8,2026-05-07
+8,Mankind Pharma Dist,Jaipur,Rajasthan,+91 8639262699,info@mankindpharmadist.com,4.2,2026-05-07
+9,Glenmark Wholesale,Mumbai,Maharashtra,+91 8255789387,info@glenmarkwholesale.com,4.4,2026-05-07
+10,Torrent Pharma Dist,Ahmedabad,Gujarat,+91 8224170175,info@torrentpharmadist.com,4.6,2026-05-07
+11,Wockhardt Supplies,Mumbai,Maharashtra,+91 7036927198,info@wockhardtsupplies.com,4.3,2026-05-07
+12,Cadila Healthcare,Ahmedabad,Gujarat,+91 9806953176,info@cadilahealthcare.com,4.5,2026-05-07
+13,Ipca Labs Wholesale,Bengaluru,Karnataka,+91 8364495648,info@ipcalabswholesale.com,4.4,2026-05-07
+14,Emcure Distributors,Pune,Maharashtra,+91 9574931101,info@emcuredistributors.com,4.2,2026-05-07
+15,Intas Pharma Dist,Ahmedabad,Gujarat,+91 9506911833,info@intaspharmadist.com,4.5,2026-05-07

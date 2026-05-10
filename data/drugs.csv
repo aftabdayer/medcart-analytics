@@ -1,0 +1,56 @@
+drug_id,name,brand,category,form,unit_price,supplier_id,requires_rx,shelf_life_days
+1,Paracetamol 500mg,Crocin,Analgesics,Tablet,12.0,5,0,730
+2,Amoxicillin 500mg,Mox,Antibiotics,Capsule,85.0,15,1,365
+3,Metformin 500mg,Glucophage,Diabetes,Tablet,28.0,10,1,730
+4,Atorvastatin 10mg,Lipitor,Cardiac,Tablet,45.0,8,1,730
+5,Amlodipine 5mg,Norvasc,Cardiac,Tablet,38.0,1,1,730
+6,Omeprazole 20mg,Omez,Gastro,Capsule,22.0,15,0,730
+7,Cetirizine 10mg,Allegra,Allergy,Tablet,15.0,11,0,730
+8,Azithromycin 500mg,Zithromax,Antibiotics,Tablet,120.0,13,1,365
+9,Losartan 50mg,Cozaar,Cardiac,Tablet,55.0,3,1,730
+10,Aspirin 75mg,Ecosprin,Cardiac,Tablet,18.0,7,0,730
+11,Metoprolol 25mg,Betaloc,Cardiac,Tablet,42.0,8,1,730
+12,Glimepiride 2mg,Amaryl,Diabetes,Tablet,65.0,9,1,730
+13,Telmisartan 40mg,Telmikind,Cardiac,Tablet,48.0,12,1,730
+14,Pantoprazole 40mg,Pantodac,Gastro,Tablet,35.0,6,0,730
+15,Montelukast 10mg,Montair,Respiratory,Tablet,52.0,12,1,730
+16,Insulin Glargine,Lantus,Diabetes,Injection,380.0,3,1,365
+17,Salbutamol Inhaler,Asthalin,Respiratory,Inhaler,145.0,14,1,730
+18,Clopidogrel 75mg,Plavix,Cardiac,Tablet,72.0,7,1,730
+19,Ibuprofen 400mg,Brufen,Analgesics,Tablet,18.0,11,0,730
+20,Dolo 650mg,Dolo,Analgesics,Tablet,14.0,3,0,730
+21,Vitamin D3 60K,Calcirol,Supplements,Capsule,85.0,11,0,730
+22,Multivitamin,Supradyn,Supplements,Tablet,220.0,5,0,730
+23,Calcium + D3,Shelcal,Supplements,Tablet,95.0,4,0,730
+24,Ranitidine 150mg,Aciloc,Gastro,Tablet,20.0,1,0,730
+25,Dicyclomine 20mg,Cyclopam,Gastro,Tablet,28.0,6,0,730
+26,Levocetirizine 5mg,Levocet,Allergy,Tablet,18.0,7,0,730
+27,Fexofenadine 120mg,Allegra,Allergy,Tablet,22.0,6,0,730
+28,Methylprednisolone 4mg,Medrol,Steroids,Tablet,62.0,13,1,365
+29,Dexamethasone 0.5mg,Decadron,Steroids,Tablet,35.0,10,1,365
+30,Amikacin 500mg,Amicin,Antibiotics,Injection,95.0,2,1,365
+31,Ceftriaxone 1g,Monocef,Antibiotics,Injection,180.0,8,1,365
+32,Metronidazole 400mg,Flagyl,Antibiotics,Tablet,18.0,5,1,365
+33,Ciprofloxacin 500mg,Cipro,Antibiotics,Tablet,45.0,8,1,365
+34,Enalapril 5mg,Vasotec,Cardiac,Tablet,32.0,15,1,730
+35,Furosemide 40mg,Lasix,Cardiac,Tablet,15.0,4,1,730
+36,Spironolactone 25mg,Aldactone,Cardiac,Tablet,28.0,15,1,730
+37,Thyronorm 50mcg,Thyronorm,Hormones,Tablet,55.0,5,1,730
+38,Thyronorm 100mcg,Thyronorm,Hormones,Tablet,72.0,12,1,730
+39,Clonazepam 0.5mg,Rivotril,Neuro,Tablet,32.0,11,1,180
+40,Alprazolam 0.25mg,Alprax,Neuro,Tablet,18.0,12,1,180
+41,Escitalopram 10mg,Nexito,Neuro,Tablet,48.0,2,1,730
+42,Sertraline 50mg,Zoloft,Neuro,Tablet,65.0,4,1,730
+43,Pregabalin 75mg,Lyrica,Neuro,Capsule,88.0,13,1,730
+44,Gabapentin 300mg,Neurontin,Neuro,Capsule,72.0,14,1,730
+45,Clobetasol Cream,Tenovate,Derma,Cream,68.0,13,0,730
+46,Betamethasone Cream,Betnovate,Derma,Cream,55.0,15,0,730
+47,Clotrimazole 1%,Candid,Derma,Cream,45.0,10,0,730
+48,Mupirocin 2%,Bactroban,Derma,Cream,95.0,10,0,365
+49,Ondansetron 4mg,Emeset,Gastro,Tablet,25.0,2,0,730
+50,Domperidone 10mg,Domstal,Gastro,Tablet,15.0,14,0,730
+51,Rabeprazole 20mg,Rablet,Gastro,Tablet,38.0,4,0,730
+52,Drotaverine 80mg,No-Spa,Gastro,Tablet,22.0,8,0,730
+53,Tramadol 50mg,Ultram,Analgesics,Capsule,42.0,11,1,730
+54,Diclofenac 50mg,Voveran,Analgesics,Tablet,22.0,7,0,730
+55,Naproxen 500mg,Naprosyn,Analgesics,Tablet,30.0,3,0,730
