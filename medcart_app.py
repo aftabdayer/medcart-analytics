@@ -47,119 +47,184 @@ st.set_page_config(
 # ─── Styling ──────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Mono&display=swap');
 
-    html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
-    .main { background-color: #f0f4f8; }
+    .main { background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); min-height: 100vh; }
+    .block-container { padding-top: 1.5rem !important; }
 
     [data-testid="stSidebar"] {
-        background: linear-gradient(160deg, #0d1b2a 0%, #1b2a3b 100%);
-        border-right: 1px solid #1e3a5f;
+        background: linear-gradient(180deg, #0d1117 0%, #161b22 100%);
+        border-right: 1px solid rgba(56,189,248,0.15);
     }
-    [data-testid="stSidebar"] * { color: #cbd5e1 !important; }
+    [data-testid="stSidebar"] * { color: #8b949e !important; }
     [data-testid="stSidebar"] .stButton>button {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.08);
-        color: #94a3b8 !important;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.06);
+        color: #8b949e !important;
         border-radius: 10px;
         text-align: left; width: 100%;
-        transition: all 0.2s;
-        font-size: 0.9rem;
-        padding: 0.5rem 0.8rem;
+        transition: all 0.25s ease;
+        font-size: 0.88rem;
+        padding: 0.55rem 0.9rem;
+        margin-bottom: 2px;
     }
     [data-testid="stSidebar"] .stButton>button:hover {
-        background: rgba(56,189,248,0.12);
-        border-color: rgba(56,189,248,0.3);
-        color: #e0f2fe !important;
+        background: rgba(56,189,248,0.1);
+        border-color: rgba(56,189,248,0.35);
+        color: #38bdf8 !important;
+        transform: translateX(3px);
     }
 
+    /* KPI Cards — glassmorphism */
     .kpi-card {
-        background: white;
-        border-radius: 16px;
+        background: rgba(255,255,255,0.05);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 18px;
         padding: 1.4rem 1.6rem;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
         position: relative;
         overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
     }
+    .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
     .kpi-card::before {
         content: "";
-        position: absolute; top: 0; left: 0; right: 0; height: 4px;
+        position: absolute; top: 0; left: 0; right: 0; height: 3px;
+        border-radius: 18px 18px 0 0;
     }
-    .kpi-card.blue::before  { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-    .kpi-card.green::before { background: linear-gradient(90deg, #10b981, #34d399); }
-    .kpi-card.amber::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-    .kpi-card.rose::before  { background: linear-gradient(90deg, #f43f5e, #fb7185); }
+    .kpi-card::after {
+        content: "";
+        position: absolute; top: -40px; right: -40px;
+        width: 120px; height: 120px;
+        border-radius: 50%;
+        opacity: 0.06;
+    }
+    .kpi-card.blue::before  { background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd); }
+    .kpi-card.blue::after   { background: #3b82f6; }
+    .kpi-card.green::before { background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7); }
+    .kpi-card.green::after  { background: #10b981; }
+    .kpi-card.amber::before { background: linear-gradient(90deg, #f59e0b, #fbbf24, #fde68a); }
+    .kpi-card.amber::after  { background: #f59e0b; }
+    .kpi-card.rose::before  { background: linear-gradient(90deg, #f43f5e, #fb7185, #fda4af); }
+    .kpi-card.rose::after   { background: #f43f5e; }
+    .kpi-card.purple::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa, #c4b5fd); }
+    .kpi-card.purple::after  { background: #8b5cf6; }
+    .kpi-card.cyan::before  { background: linear-gradient(90deg, #06b6d4, #22d3ee, #67e8f9); }
+    .kpi-card.cyan::after   { background: #06b6d4; }
 
-    .kpi-label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em;
-                 text-transform: uppercase; color: #94a3b8; margin-bottom: 0.4rem; }
-    .kpi-value { font-size: 2rem; font-weight: 700; color: #0f172a; line-height: 1; }
-    .kpi-sub   { font-size: 0.8rem; color: #64748b; margin-top: 0.3rem; }
+    .kpi-icon  { font-size: 1.6rem; margin-bottom: 0.5rem; display: block; }
+    .kpi-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+                 text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 0.3rem; }
+    .kpi-value { font-size: 2.1rem; font-weight: 800; color: #f8fafc; line-height: 1; }
+    .kpi-sub   { font-size: 0.78rem; color: rgba(255,255,255,0.4); margin-top: 0.35rem; }
+    .kpi-delta { font-size: 0.78rem; color: #34d399; margin-top: 0.3rem; font-weight: 600; }
 
-    .chart-card {
-        background: white; border-radius: 16px;
-        padding: 1.2rem 1.4rem;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    /* Chart containers */
+    .chart-wrap {
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(8px);
+        border-radius: 16px;
+        padding: 1rem 1.2rem 0.5rem 1.2rem;
+        border: 1px solid rgba(255,255,255,0.08);
         margin-bottom: 1rem;
     }
-    .section-title {
-        font-size: 1.5rem; font-weight: 700; color: #0f172a;
-        margin-bottom: 0.2rem;
-    }
-    .section-sub { font-size: 0.9rem; color: #64748b; margin-bottom: 1.2rem; }
 
+    .section-title {
+        font-size: 1.6rem; font-weight: 800; color: #f8fafc;
+        margin-bottom: 0.15rem; letter-spacing: -0.02em;
+    }
+    .section-sub { font-size: 0.88rem; color: rgba(255,255,255,0.45); margin-bottom: 1.3rem; }
+
+    .page-title { font-size: 1.6rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.15rem; }
+    .page-sub   { font-size: 0.88rem; color: rgba(255,255,255,0.45); margin-bottom: 1.3rem; }
+
+    /* Insight cards */
+    .insight-box {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-left: 4px solid #3b82f6;
+        border-radius: 12px;
+        padding: 1rem 1.1rem;
+        margin: 0.4rem 0;
+        color: #e2e8f0;
+        font-size: 0.88rem;
+        line-height: 1.6;
+    }
+    .insight-box b { color: #f8fafc; }
+
+    /* Risk pills */
     .risk-pill {
         display: inline-block; padding: 3px 12px;
-        border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+        border-radius: 20px; font-size: 0.75rem; font-weight: 700;
     }
-    .pill-red    { background:#fee2e2; color:#991b1b; }
-    .pill-amber  { background:#fef3c7; color:#92400e; }
-    .pill-green  { background:#dcfce7; color:#166534; }
-    .pill-blue   { background:#dbeafe; color:#1e40af; }
+    .pill-red    { background:rgba(239,68,68,0.2);  color:#fca5a5; border:1px solid rgba(239,68,68,0.3); }
+    .pill-amber  { background:rgba(245,158,11,0.2); color:#fde68a; border:1px solid rgba(245,158,11,0.3); }
+    .pill-green  { background:rgba(34,197,94,0.2);  color:#86efac; border:1px solid rgba(34,197,94,0.3); }
+    .pill-blue   { background:rgba(59,130,246,0.2); color:#93c5fd; border:1px solid rgba(59,130,246,0.3); }
 
+    /* Metric override */
     [data-testid="stMetric"] {
-        background: white; border-radius: 12px;
-        padding: 1rem; border: 1px solid #e2e8f0;
+        background: rgba(255,255,255,0.05);
+        border-radius: 12px; padding: 1rem;
+        border: 1px solid rgba(255,255,255,0.1);
     }
-    div[data-testid="stMetricValue"] { font-size: 1.8rem !important; font-weight: 700 !important; }
+    div[data-testid="stMetricValue"] { font-size: 1.8rem !important; font-weight: 800 !important; color: #f8fafc !important; }
+    div[data-testid="stMetricLabel"] { color: rgba(255,255,255,0.5) !important; }
 
-    .page-title {
-        font-size: 1.8rem; font-weight: 700; color: #0f172a;
-        margin-bottom: 0.2rem; margin-top: 0.5rem;
+    /* Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        background: rgba(255,255,255,0.04);
+        border-radius: 10px; padding: 4px;
+        border: 1px solid rgba(255,255,255,0.08);
     }
-    .page-sub { font-size: 0.95rem; color: #64748b; margin-bottom: 1.4rem; }
+    .stTabs [data-baseweb="tab"] { color: rgba(255,255,255,0.5); border-radius: 8px; }
+    .stTabs [aria-selected="true"] {
+        background: rgba(59,130,246,0.25) !important;
+        color: #93c5fd !important;
+    }
 
+    /* Dataframe */
+    .stDataFrame { border-radius: 12px; overflow: hidden; }
+
+    /* Select boxes */
+    .stSelectbox [data-baseweb="select"] > div {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: #e2e8f0;
+        border-radius: 10px;
+    }
+
+    /* Chat */
+    [data-testid="stChatMessage"] {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 14px;
+    }
+
+    /* Footer */
     .footer {
         text-align: center;
         padding: 2rem 0 1rem 0;
-        color: #94a3b8;
-        font-size: 0.82rem;
-        border-top: 1px solid #e2e8f0;
+        color: rgba(255,255,255,0.3);
+        font-size: 0.8rem;
+        border-top: 1px solid rgba(255,255,255,0.08);
         margin-top: 3rem;
     }
-    .footer a { color: #3b82f6; text-decoration: none; }
-    .footer a:hover { text-decoration: underline; }
+    .footer a { color: #60a5fa; text-decoration: none; }
+    .footer a:hover { color: #93c5fd; text-decoration: underline; }
 
-    .badge {
-        display: inline-block;
-        background: #eff6ff;
-        color: #1d4ed8;
-        border-radius: 20px;
-        padding: 3px 12px;
-        font-size: 0.78rem;
-        font-weight: 600;
-        margin: 2px;
-    }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
 
-    .insight-box {
-        background: linear-gradient(135deg, #eff6ff, #f0fdf4);
-        border-left: 4px solid #3b82f6;
-        border-radius: 8px;
-        padding: 1rem 1.2rem;
-        margin: 0.5rem 0;
-    }
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -249,45 +314,80 @@ page = st.session_state.page
 # PAGE 1 — DASHBOARD
 # ══════════════════════════════════════════════════════════════════════════════
 CHART_LAYOUT = dict(
-    plot_bgcolor="white", paper_bgcolor="white",
-    font=dict(family="DM Sans, sans-serif", color="#374151"),
+    plot_bgcolor="rgba(255,255,255,0.03)",
+    paper_bgcolor="rgba(0,0,0,0)",
+    font=dict(family="Inter, sans-serif", color="#94a3b8"),
     margin=dict(t=45, b=30, l=10, r=10),
-    hoverlabel=dict(bgcolor="white", font_size=13, font_family="DM Sans"),
+    hoverlabel=dict(bgcolor="#1e293b", font_size=13, font_family="Inter",
+                    font_color="white", bordercolor="rgba(255,255,255,0.2)"),
 )
-COLORS = ["#3b82f6","#10b981","#f59e0b","#f43f5e","#8b5cf6","#06b6d4","#ec4899","#14b8a6"]
+COLORS = ["#3b82f6","#10b981","#f59e0b","#f43f5e","#8b5cf6","#06b6d4","#ec4899","#14b8a6","#84cc16","#fb923c"]
 
 if page == "dashboard":
     rev, ords, pats, drgs = load_metrics()
 
+    # Extra quick metrics
+    aov_df = run_query("SELECT ROUND(AVG(total_amount),0) AS v FROM orders WHERE status='completed'")
+    aov = float(aov_df.iloc[0,0])
+    risk_df = run_query("SELECT COUNT(*) AS v FROM v_inventory_risk WHERE risk_status != 'Healthy'")
+    at_risk = int(risk_df.iloc[0,0])
+
     st.markdown('<p class="section-title">📊 Executive Dashboard</p>', unsafe_allow_html=True)
     st.markdown(f'<p class="section-sub">Live overview of MedCart pharmacy performance &nbsp;·&nbsp; Last updated: {datetime.datetime.now().strftime("%d %b %Y, %I:%M %p")}</p>', unsafe_allow_html=True)
 
-    # ── KPI Cards ─────────────────────────────────────────────────────────────
-    c1, c2, c3, c4 = st.columns(4)
+    # ── 6 KPI Cards ───────────────────────────────────────────────────────────
+    c1, c2, c3, c4, c5, c6 = st.columns(6)
     with c1:
         st.markdown(f"""<div class="kpi-card blue">
-            <div class="kpi-label">💰 Total Revenue</div>
+            <span class="kpi-icon">💰</span>
+            <div class="kpi-label">Total Revenue</div>
             <div class="kpi-value">Rs.{rev/1e5:.2f}L</div>
             <div class="kpi-sub">Completed orders only</div>
         </div>""", unsafe_allow_html=True)
     with c2:
         st.markdown(f"""<div class="kpi-card green">
-            <div class="kpi-label">📦 Total Orders</div>
+            <span class="kpi-icon">📦</span>
+            <div class="kpi-label">Total Orders</div>
             <div class="kpi-value">{int(ords):,}</div>
             <div class="kpi-sub">Across all channels</div>
         </div>""", unsafe_allow_html=True)
     with c3:
         st.markdown(f"""<div class="kpi-card amber">
-            <div class="kpi-label">👥 Patients</div>
+            <span class="kpi-icon">👥</span>
+            <div class="kpi-label">Patients</div>
             <div class="kpi-value">{int(pats):,}</div>
-            <div class="kpi-sub">Registered patients</div>
+            <div class="kpi-sub">Registered profiles</div>
         </div>""", unsafe_allow_html=True)
     with c4:
         st.markdown(f"""<div class="kpi-card rose">
-            <div class="kpi-label">💊 Drugs Listed</div>
+            <span class="kpi-icon">💊</span>
+            <div class="kpi-label">Drugs Listed</div>
             <div class="kpi-value">{int(drgs)}</div>
             <div class="kpi-sub">Active SKUs</div>
         </div>""", unsafe_allow_html=True)
+    with c5:
+        st.markdown(f"""<div class="kpi-card purple">
+            <span class="kpi-icon">🛒</span>
+            <div class="kpi-label">Avg Order Value</div>
+            <div class="kpi-value">Rs.{int(aov):,}</div>
+            <div class="kpi-sub">Per completed order</div>
+        </div>""", unsafe_allow_html=True)
+    with c6:
+        color_cls = "rose" if at_risk > 5 else "cyan"
+        st.markdown(f"""<div class="kpi-card {color_cls}">
+            <span class="kpi-icon">⚠️</span>
+            <div class="kpi-label">SKUs At Risk</div>
+            <div class="kpi-value">{at_risk}</div>
+            <div class="kpi-sub">Low stock or near expiry</div>
+        </div>""", unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ── Year filter ───────────────────────────────────────────────────────────
+    years_df = run_query("SELECT DISTINCT STRFTIME('%Y', order_date) AS yr FROM orders WHERE status='completed' ORDER BY yr")
+    all_years = years_df["yr"].tolist()
+    sel_year = st.selectbox("📅 Filter by Year", ["All Years"] + all_years, index=0, key="dash_year")
+    year_filter = f"AND STRFTIME('%Y', order_date) = '{sel_year}'" if sel_year != "All Years" else ""
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -295,11 +395,11 @@ if page == "dashboard":
     col1, col2 = st.columns([3, 2])
 
     with col1:
-        df_monthly = run_query("""
+        df_monthly = run_query(f"""
             SELECT STRFTIME('%Y-%m', order_date) AS month,
                    ROUND(SUM(total_amount)/1000,1) AS revenue_k,
                    COUNT(*) AS orders
-            FROM orders WHERE status='completed'
+            FROM orders WHERE status='completed' {year_filter}
             GROUP BY month ORDER BY month
         """)
         fig = go.Figure()
@@ -414,29 +514,147 @@ if page == "dashboard":
         )
         st.plotly_chart(fig5, use_container_width=True)
 
+    # ── Row 3: Order Heatmap (Day × Hour) ────────────────────────────────────
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("### 🕐 Order Activity Heatmap")
+    df_heat = run_query(f"""
+        SELECT
+            CASE CAST(STRFTIME('%w', order_date) AS INTEGER)
+                WHEN 0 THEN 'Sun' WHEN 1 THEN 'Mon' WHEN 2 THEN 'Tue'
+                WHEN 3 THEN 'Wed' WHEN 4 THEN 'Thu' WHEN 5 THEN 'Fri'
+                WHEN 6 THEN 'Sat'
+            END AS day,
+            CAST(STRFTIME('%w', order_date) AS INTEGER) AS day_num,
+            CAST(STRFTIME('%H', order_date) AS INTEGER) AS hour,
+            COUNT(*) AS orders
+        FROM orders WHERE status='completed' {year_filter}
+        GROUP BY day_num, hour ORDER BY day_num, hour
+    """)
+    if not df_heat.empty:
+        pivot = df_heat.pivot_table(index='hour', columns='day', values='orders', fill_value=0)
+        day_order = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
+        pivot = pivot.reindex(columns=[d for d in day_order if d in pivot.columns])
+        fig_heat = px.imshow(
+            pivot,
+            labels=dict(x="Day of Week", y="Hour of Day", color="Orders"),
+            color_continuous_scale=[[0,"#0f172a"],[0.3,"#1e3a5f"],[0.6,"#2563eb"],[1,"#60a5fa"]],
+            title="Order Volume by Day × Hour",
+            aspect="auto",
+            text_auto=True,
+        )
+        fig_heat.update_layout(
+            **CHART_LAYOUT,
+            height=380,
+            title=dict(font=dict(size=15, color="#f8fafc")),
+            xaxis=dict(side="top", showgrid=False, tickfont=dict(color="#94a3b8")),
+            yaxis=dict(showgrid=False, tickfont=dict(color="#94a3b8"),
+                       ticktext=[f"{h:02d}:00" for h in range(24)],
+                       tickvals=list(range(24))),
+            coloraxis_showscale=True,
+            coloraxis_colorbar=dict(tickfont=dict(color="#94a3b8"), title=dict(font=dict(color="#94a3b8"))),
+        )
+        fig_heat.update_traces(textfont=dict(size=9, color="rgba(255,255,255,0.6)"))
+        st.plotly_chart(fig_heat, use_container_width=True)
+        st.caption("💡 Darker blue = more orders. Use this to plan staffing, stock replenishment, and push notification timing.")
+
+    # ── Row 4: Patient Age Group + Gender ─────────────────────────────────────
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("### 👤 Patient Demographics")
+    dcol1, dcol2, dcol3 = st.columns([2, 2, 1])
+
+    with dcol1:
+        df_age = run_query(f"""
+            SELECT
+                CASE
+                    WHEN age < 18 THEN '0–17'
+                    WHEN age < 30 THEN '18–29'
+                    WHEN age < 40 THEN '30–39'
+                    WHEN age < 50 THEN '40–49'
+                    WHEN age < 60 THEN '50–59'
+                    WHEN age < 70 THEN '60–69'
+                    WHEN age < 80 THEN '70–79'
+                    ELSE '80+'
+                END AS age_group,
+                COUNT(*) AS patients
+            FROM patients GROUP BY age_group ORDER BY MIN(age)
+        """)
+        fig_age = go.Figure(go.Bar(
+            x=df_age["age_group"], y=df_age["patients"],
+            marker=dict(
+                color=df_age["patients"],
+                colorscale=[[0,"#1e3a5f"],[0.5,"#3b82f6"],[1,"#60a5fa"]],
+                showscale=False,
+                line=dict(width=0)
+            ),
+            text=df_age["patients"],
+            texttemplate="%{text}",
+            textposition="outside",
+            textfont=dict(color="#94a3b8", size=11),
+        ))
+        fig_age.update_layout(
+            **CHART_LAYOUT,
+            title=dict(text="Patients by Age Group", font=dict(size=15, color="#f8fafc")),
+            height=300,
+            xaxis=dict(showgrid=False, tickfont=dict(color="#94a3b8")),
+            yaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94a3b8")),
+        )
+        st.plotly_chart(fig_age, use_container_width=True)
+
+    with dcol2:
+        df_state = run_query(f"""
+            SELECT p.state, COUNT(DISTINCT p.patient_id) AS patients,
+                   ROUND(SUM(o.total_amount)/1000,1) AS rev_k
+            FROM patients p
+            JOIN orders o ON o.patient_id=p.patient_id
+            WHERE o.status='completed' {year_filter}
+            GROUP BY p.state ORDER BY rev_k DESC LIMIT 10
+        """)
+        fig_state = px.bar(df_state, x="rev_k", y="state", orientation="h",
+                           color="rev_k",
+                           color_continuous_scale=[[0,"#1e3a5f"],[1,"#10b981"]],
+                           labels={"rev_k":"Revenue (Rs.K)", "state":"State"},
+                           title="Top States by Revenue")
+        fig_state.update_layout(
+            **CHART_LAYOUT,
+            height=300,
+            title=dict(font=dict(size=15, color="#f8fafc")),
+            coloraxis_showscale=False,
+            xaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94a3b8")),
+            yaxis=dict(showgrid=False, tickfont=dict(color="#94a3b8")),
+        )
+        st.plotly_chart(fig_state, use_container_width=True)
+
+    with dcol3:
+        df_gender = run_query("SELECT gender, COUNT(*) AS count FROM patients GROUP BY gender")
+        fig_gender = px.pie(df_gender, names="gender", values="count", hole=0.6,
+                            color_discrete_sequence=["#3b82f6","#f43f5e","#94a3b8"],
+                            title="Gender Mix")
+        fig_gender.update_traces(textinfo="label+percent", textfont=dict(size=11))
+        fig_gender.update_layout(
+            **CHART_LAYOUT,
+            height=300,
+            title=dict(font=dict(size=15, color="#f8fafc")),
+            showlegend=False,
+        )
+        st.plotly_chart(fig_gender, use_container_width=True)
+
     # ── Key Insights ──────────────────────────────────────────────────────────
+    st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("### 💡 Key Business Insights")
     i1, i2, i3, i4 = st.columns(4)
-    with i1:
-        st.markdown("""<div class="insight-box">
-            <b>🏆 Top Category</b><br>
-            Antibiotics leads revenue at 17.1% share — consistent demand from acute illness cycles.
-        </div>""", unsafe_allow_html=True)
-    with i2:
-        st.markdown("""<div class="insight-box">
-            <b>📱 Online Dominates</b><br>
-            60% of orders are online. Investing in mobile UX directly impacts revenue.
-        </div>""", unsafe_allow_html=True)
-    with i3:
-        st.markdown("""<div class="insight-box">
-            <b>💳 UPI First</b><br>
-            UPI is the #1 payment method — aligns with India's digital payment adoption trend.
-        </div>""", unsafe_allow_html=True)
-    with i4:
-        st.markdown("""<div class="insight-box">
-            <b>📈 Seasonal Peaks</b><br>
-            Revenue spikes in Nov–Feb (winter) and Jun–Aug (monsoon). Stock up 4 weeks ahead.
-        </div>""", unsafe_allow_html=True)
+    insights = [
+        ("🏆", "Top Category", "blue", "Antibiotics leads at 17.1% revenue share — driven by consistent demand from acute illness cycles year-round."),
+        ("📱", "Online Dominates", "green", "60% of orders are online. Every Rs.1 invested in mobile UX has outsized revenue impact."),
+        ("💳", "UPI First", "amber", "UPI is the #1 payment method — aligns with India's rapid digital payment adoption."),
+        ("📈", "Seasonal Peaks", "rose", "Revenue spikes in Nov–Feb (winter) and Jun–Aug (monsoon). Stock up 4 weeks ahead to avoid stockouts."),
+    ]
+    for col, (icon, title, color, text) in zip([i1,i2,i3,i4], insights):
+        border_colors = {"blue":"#3b82f6","green":"#10b981","amber":"#f59e0b","rose":"#f43f5e"}
+        bc = border_colors[color]
+        with col:
+            st.markdown(f"""<div class="insight-box" style="border-left-color:{bc}">
+                <b>{icon} {title}</b><br><span style="color:rgba(255,255,255,0.6)">{text}</span>
+            </div>""", unsafe_allow_html=True)
 
     # ── Footer ────────────────────────────────────────────────────────────────
     st.markdown("""
