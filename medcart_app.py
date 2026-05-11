@@ -47,183 +47,111 @@ st.set_page_config(
 # ─── Styling ──────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Mono&display=swap');
-
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
-    .main { background-color: #f0f4f8; min-height: 100vh; }
+    /* ── Main area ── */
+    .main { background-color: #f8fafc; }
     .block-container { padding-top: 1.5rem !important; }
 
+    /* ── Sidebar ── */
     [data-testid="stSidebar"] {
         background: linear-gradient(180deg, #0d1117 0%, #161b22 100%);
         border-right: 1px solid rgba(56,189,248,0.15);
     }
     [data-testid="stSidebar"] * { color: #8b949e !important; }
     [data-testid="stSidebar"] .stButton>button {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.06);
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
         color: #8b949e !important;
-        border-radius: 10px;
-        text-align: left; width: 100%;
-        transition: all 0.25s ease;
-        font-size: 0.88rem;
-        padding: 0.55rem 0.9rem;
-        margin-bottom: 2px;
+        border-radius: 10px; text-align: left; width: 100%;
+        transition: all 0.2s; font-size: 0.88rem;
+        padding: 0.55rem 0.9rem; margin-bottom: 2px;
     }
     [data-testid="stSidebar"] .stButton>button:hover {
-        background: rgba(56,189,248,0.1);
-        border-color: rgba(56,189,248,0.35);
-        color: #38bdf8 !important;
-        transform: translateX(3px);
+        background: rgba(56,189,248,0.12);
+        border-color: rgba(56,189,248,0.4);
+        color: #38bdf8 !important; transform: translateX(4px);
     }
 
-    /* KPI Cards — glassmorphism */
-    .kpi-card {
+    /* ── KPI Cards ── uses inline style, so these just set the wrapper */
+    .kpi-wrap {
         background: white;
-        border-radius: 16px;
-        padding: 1.4rem 1.6rem;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-        position: relative;
-        overflow: hidden;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
-    .kpi-card::before {
-        content: "";
-        position: absolute; top: 0; left: 0; right: 0; height: 3px;
-        border-radius: 18px 18px 0 0;
-    }
-    .kpi-card::after {
-        content: "";
-        position: absolute; top: -40px; right: -40px;
-        width: 120px; height: 120px;
-        border-radius: 50%;
-        opacity: 0.06;
-    }
-    .kpi-card.blue::before  { background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd); }
-    .kpi-card.blue::after   { background: #3b82f6; }
-    .kpi-card.green::before { background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7); }
-    .kpi-card.green::after  { background: #10b981; }
-    .kpi-card.amber::before { background: linear-gradient(90deg, #f59e0b, #fbbf24, #fde68a); }
-    .kpi-card.amber::after  { background: #f59e0b; }
-    .kpi-card.rose::before  { background: linear-gradient(90deg, #f43f5e, #fb7185, #fda4af); }
-    .kpi-card.rose::after   { background: #f43f5e; }
-    .kpi-card.purple::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa, #c4b5fd); }
-    .kpi-card.purple::after  { background: #8b5cf6; }
-    .kpi-card.cyan::before  { background: linear-gradient(90deg, #06b6d4, #22d3ee, #67e8f9); }
-    .kpi-card.cyan::after   { background: #06b6d4; }
-
-    .kpi-icon  { font-size: 1.6rem; margin-bottom: 0.5rem; display: block; }
-    .kpi-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
-                 text-transform: uppercase; color: #94a3b8; margin-bottom: 0.3rem; }
-    .kpi-value { font-size: 1.6rem; font-weight: 800; color: #0f172a; line-height: 1.1; }
-    .kpi-sub   { font-size: 0.75rem; color: #64748b; margin-top: 0.3rem; }
-    .kpi-delta { font-size: 0.75rem; color: #10b981; margin-top: 0.3rem; font-weight: 600; }
-
-    /* Chart containers */
-    .chart-wrap {
-        background: rgba(255,255,255,0.04);
-        backdrop-filter: blur(8px);
-        border-radius: 16px;
-        padding: 1rem 1.2rem 0.5rem 1.2rem;
-        border: 1px solid rgba(255,255,255,0.08);
-        margin-bottom: 1rem;
-    }
-
-    .section-title {
-        font-size: 1.5rem; font-weight: 800; color: #0f172a;
-        margin-bottom: 0.15rem; letter-spacing: -0.02em;
-    }
-    .section-sub { font-size: 0.88rem; color: #64748b; margin-bottom: 1.3rem; }
-
-    .page-title { font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 0.15rem; }
-    .page-sub   { font-size: 0.88rem; color: #64748b; margin-bottom: 1.3rem; }
-
-    /* Insight cards */
-    .insight-box {
-        background: white;
-        border: 1px solid #e2e8f0;
-        border-left: 4px solid #3b82f6;
-        border-radius: 12px;
-        padding: 1rem 1.2rem;
-        margin: 0.4rem 0;
-        color: #334155;
-        font-size: 0.88rem;
-        line-height: 1.6;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .insight-box b { color: #0f172a; font-size: 0.95rem; }
-
-    /* Risk pills */
-    .risk-pill {
-        display: inline-block; padding: 3px 12px;
-        border-radius: 20px; font-size: 0.75rem; font-weight: 700;
-    }
-    .pill-red    { background:rgba(239,68,68,0.2);  color:#fca5a5; border:1px solid rgba(239,68,68,0.3); }
-    .pill-amber  { background:rgba(245,158,11,0.2); color:#fde68a; border:1px solid rgba(245,158,11,0.3); }
-    .pill-green  { background:rgba(34,197,94,0.2);  color:#86efac; border:1px solid rgba(34,197,94,0.3); }
-    .pill-blue   { background:rgba(59,130,246,0.2); color:#93c5fd; border:1px solid rgba(59,130,246,0.3); }
-
-    /* Metric override */
-    [data-testid="stMetric"] {
-        background: rgba(255,255,255,0.05);
-        border-radius: 12px; padding: 1rem;
-        border: 1px solid rgba(255,255,255,0.1);
-    }
-    div[data-testid="stMetricValue"] { font-size: 1.8rem !important; font-weight: 800 !important; color: #f8fafc !important; }
-    div[data-testid="stMetricLabel"] { color: rgba(255,255,255,0.5) !important; }
-
-    /* Tabs */
-    .stTabs [data-baseweb="tab-list"] {
-        background: rgba(255,255,255,0.04);
-        border-radius: 10px; padding: 4px;
-        border: 1px solid rgba(255,255,255,0.08);
-    }
-    .stTabs [data-baseweb="tab"] { color: rgba(255,255,255,0.5); border-radius: 8px; }
-    .stTabs [aria-selected="true"] {
-        background: rgba(59,130,246,0.25) !important;
-        color: #93c5fd !important;
-    }
-
-    /* Dataframe */
-    .stDataFrame { border-radius: 12px; overflow: hidden; }
-
-    /* Select boxes */
-    .stSelectbox [data-baseweb="select"] > div {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        color: #e2e8f0;
-        border-radius: 10px;
-    }
-
-    /* Chat */
-    [data-testid="stChatMessage"] {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.08);
         border-radius: 14px;
+        padding: 1.1rem 1.2rem;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        position: relative; overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+        margin-bottom: 0.5rem;
+        min-height: 120px;
+    }
+    .kpi-wrap:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .kpi-wrap .bar { position:absolute; top:0; left:0; right:0; height:4px; border-radius:14px 14px 0 0; }
+    .kpi-wrap .ico { font-size:1.3rem; margin-bottom:0.35rem; display:block; }
+    .kpi-wrap .lbl { font-size:0.68rem; font-weight:700; letter-spacing:0.09em;
+                     text-transform:uppercase; color:#94a3b8; margin-bottom:0.25rem; }
+    .kpi-wrap .val { font-size:1.55rem; font-weight:800; color:#0f172a !important; line-height:1.1; }
+    .kpi-wrap .sub { font-size:0.73rem; color:#64748b; margin-top:0.25rem; }
+
+    /* ── Section headings ── */
+    .section-title { font-size:1.45rem; font-weight:800; color:#0f172a; margin-bottom:0.1rem; }
+    .section-sub   { font-size:0.87rem; color:#64748b; margin-bottom:1.2rem; }
+    .page-title    { font-size:1.45rem; font-weight:800; color:#0f172a; margin-bottom:0.1rem; }
+    .page-sub      { font-size:0.87rem; color:#64748b; margin-bottom:1.2rem; }
+
+    /* ── Insight cards ── */
+    .insight-box {
+        background: white; border:1px solid #e2e8f0;
+        border-left:4px solid #3b82f6; border-radius:12px;
+        padding:1rem 1.1rem; margin:0.4rem 0;
+        color:#334155 !important; font-size:0.87rem; line-height:1.65;
+        box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
+    .insight-box b { color:#0f172a !important; font-size:0.93rem; }
+    .insight-box span { color:#475569 !important; }
+
+    /* ── Tabs ── */
+    .stTabs [data-baseweb="tab-list"] {
+        background:#f1f5f9; border-radius:10px; padding:4px;
+        border:1px solid #e2e8f0;
+    }
+    .stTabs [data-baseweb="tab"] { color:#64748b; border-radius:8px; font-weight:500; }
+    .stTabs [aria-selected="true"] {
+        background:white !important; color:#3b82f6 !important;
+        box-shadow:0 2px 6px rgba(0,0,0,0.08);
     }
 
-    /* Footer */
+    /* ── st.metric override ── */
+    [data-testid="stMetric"] {
+        background:white; border-radius:12px; padding:1rem;
+        border:1px solid #e2e8f0; box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    }
+    div[data-testid="stMetricValue"] { font-size:1.7rem !important; font-weight:800 !important; color:#0f172a !important; }
+    div[data-testid="stMetricLabel"] { color:#64748b !important; font-weight:600 !important; }
+
+    /* ── Chat messages ── */
+    [data-testid="stChatMessage"] {
+        background:white; border:1px solid #e2e8f0; border-radius:14px;
+        box-shadow:0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    /* ── Footer ── */
     .footer {
-        text-align: center;
-        padding: 2rem 0 1rem 0;
-        color: #94a3b8;
-        font-size: 0.8rem;
-        border-top: 1px solid #e2e8f0;
-        margin-top: 3rem;
+        text-align:center; padding:2rem 0 1rem 0;
+        color:#94a3b8; font-size:0.8rem;
+        border-top:1px solid #e2e8f0; margin-top:3rem;
     }
-    .footer a { color: #60a5fa; text-decoration: none; }
-    .footer a:hover { color: #93c5fd; text-decoration: underline; }
+    .footer a { color:#3b82f6; text-decoration:none; }
+    .footer b { color:#0f172a; }
 
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width:6px; height:6px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
 
-    /* Hide Streamlit branding */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
+    #MainMenu { visibility:hidden; }
+    footer { visibility:hidden; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -335,50 +263,23 @@ if page == "dashboard":
     st.markdown(f'<p class="section-sub">Live overview of MedCart pharmacy performance &nbsp;·&nbsp; Last updated: {datetime.datetime.now().strftime("%d %b %Y, %I:%M %p")}</p>', unsafe_allow_html=True)
 
     # ── 6 KPI Cards ───────────────────────────────────────────────────────────
+    def kpi(col, icon, label, value, sub, bar_color):
+        col.markdown(f'''<div class="kpi-wrap">
+            <div class="bar" style="background:{bar_color}"></div>
+            <span class="ico">{icon}</span>
+            <div class="lbl">{label}</div>
+            <div class="val">{value}</div>
+            <div class="sub">{sub}</div>
+        </div>''', unsafe_allow_html=True)
+
     c1, c2, c3, c4, c5, c6 = st.columns(6)
-    with c1:
-        st.markdown(f"""<div class="kpi-card blue">
-            <span class="kpi-icon">💰</span>
-            <div class="kpi-label">Total Revenue</div>
-            <div class="kpi-value">Rs.{rev/1e5:.2f}L</div>
-            <div class="kpi-sub">Completed orders only</div>
-        </div>""", unsafe_allow_html=True)
-    with c2:
-        st.markdown(f"""<div class="kpi-card green">
-            <span class="kpi-icon">📦</span>
-            <div class="kpi-label">Total Orders</div>
-            <div class="kpi-value">{int(ords):,}</div>
-            <div class="kpi-sub">Across all channels</div>
-        </div>""", unsafe_allow_html=True)
-    with c3:
-        st.markdown(f"""<div class="kpi-card amber">
-            <span class="kpi-icon">👥</span>
-            <div class="kpi-label">Patients</div>
-            <div class="kpi-value">{int(pats):,}</div>
-            <div class="kpi-sub">Registered profiles</div>
-        </div>""", unsafe_allow_html=True)
-    with c4:
-        st.markdown(f"""<div class="kpi-card rose">
-            <span class="kpi-icon">💊</span>
-            <div class="kpi-label">Drugs Listed</div>
-            <div class="kpi-value">{int(drgs)}</div>
-            <div class="kpi-sub">Active SKUs</div>
-        </div>""", unsafe_allow_html=True)
-    with c5:
-        st.markdown(f"""<div class="kpi-card purple">
-            <span class="kpi-icon">🛒</span>
-            <div class="kpi-label">Avg Order Value</div>
-            <div class="kpi-value">Rs.{int(aov):,}</div>
-            <div class="kpi-sub">Per completed order</div>
-        </div>""", unsafe_allow_html=True)
-    with c6:
-        color_cls = "rose" if at_risk > 5 else "cyan"
-        st.markdown(f"""<div class="kpi-card {color_cls}">
-            <span class="kpi-icon">⚠️</span>
-            <div class="kpi-label">SKUs At Risk</div>
-            <div class="kpi-value">{at_risk}</div>
-            <div class="kpi-sub">Low stock or near expiry</div>
-        </div>""", unsafe_allow_html=True)
+    kpi(c1, "💰", "Total Revenue",    f"Rs.{rev/1e5:.2f}L",  "Completed orders",   "linear-gradient(90deg,#3b82f6,#60a5fa)")
+    kpi(c2, "📦", "Total Orders",     f"{int(ords):,}",      "All channels",        "linear-gradient(90deg,#10b981,#34d399)")
+    kpi(c3, "👥", "Patients",         f"{int(pats):,}",      "Registered",          "linear-gradient(90deg,#f59e0b,#fbbf24)")
+    kpi(c4, "💊", "Drugs Listed",     f"{int(drgs)}",        "Active SKUs",         "linear-gradient(90deg,#f43f5e,#fb7185)")
+    kpi(c5, "🛒", "Avg Order Value",  f"Rs.{int(aov):,}",   "Per order",           "linear-gradient(90deg,#8b5cf6,#a78bfa)")
+    risk_color = "linear-gradient(90deg,#ef4444,#f87171)" if at_risk > 5 else "linear-gradient(90deg,#06b6d4,#22d3ee)"
+    kpi(c6, "⚠️", "SKUs At Risk",    f"{at_risk}",          "Low/near expiry",     risk_color)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
@@ -652,7 +553,7 @@ if page == "dashboard":
         bc = border_colors[color]
         with col:
             st.markdown(f"""<div class="insight-box" style="border-left-color:{bc}">
-                <b>{icon} {title}</b><br><span style="color:#475569">{text}</span>
+                <b>{icon} {title}</b><br><span>{text}</span>
             </div>""", unsafe_allow_html=True)
 
     # ── Footer ────────────────────────────────────────────────────────────────
