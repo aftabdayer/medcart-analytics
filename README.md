@@ -1,3 +1,9 @@
+## 🚀 Live Demo
+👉 **[Open Live App](https://medcart-analytics-zr23wqxnafiy7flo2xmchp.streamlit.app/)**
+
+Features: Executive Dashboard · Inventory Alerts · Customer Segmentation · Demand Forecast · AI Chatbot · Prescription Scanner
+
+
 # 🏥 MedCart Intelligence Platform
 
 > **End-to-end pharmacy analytics platform** combining SQL data modelling, Python EDA, and ML demand forecasting — purpose-built for health-retail companies like 1mg, PharmEasy, and Apollo Pharmacy.
